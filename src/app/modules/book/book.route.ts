@@ -19,7 +19,11 @@ router.post(
 router.get("/:bookId", bookController.getSingleBook);
 
 // ! for updaing  book
-router.put("/:bookId", bookController.updateBook);
+router.put(
+  "/:bookId",
+  validateRequest(bookValidationSchemas.updateBookValidationSchema),
+  bookController.updateBook
+);
 
 // ! for deleting  book
 router.delete("/:bookId", bookController.deleteBook);
