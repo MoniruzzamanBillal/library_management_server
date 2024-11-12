@@ -15,5 +15,46 @@ const addBook = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting all books
+const getAllBooks = catchAsync(async (req, res) => {
+  const result = await bookServices.getAllBooks();
+
+  sendResponse(res, {
+    success: true,
+    status: httpStatus.OK,
+    message: "Books retrieved successfully",
+    data: result,
+  });
+});
+
+// ! for getting single  books
+const getSingleBook = catchAsync(async (req, res) => {
+  const result = await bookServices.getSingleBook(req.params?.bookId);
+
+  sendResponse(res, {
+    success: true,
+    status: httpStatus.OK,
+    message: "Book retrieved successfully",
+    data: result,
+  });
+});
+
+// ! for updating books
+const updateBook = catchAsync(async (req, res) => {
+  const result = await bookServices.updateBook(req.params?.bookId, req.body);
+
+  sendResponse(res, {
+    success: true,
+    status: httpStatus.OK,
+    message: "Book updated successfully",
+    data: result,
+  });
+});
+
 //
-export const bookController = { addBook };
+export const bookController = {
+  addBook,
+  getAllBooks,
+  getSingleBook,
+  updateBook,
+};
