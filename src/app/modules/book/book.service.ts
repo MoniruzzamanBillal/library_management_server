@@ -12,7 +12,11 @@ const addBook = async (payload: TBook) => {
 
 // ! for getting all books
 const getAllBooks = async () => {
-  const result = await prisma.book.findMany();
+  const result = await prisma.book.findMany({
+    where: {
+      isDeleted: false,
+    },
+  });
 
   return result;
 };
@@ -20,7 +24,7 @@ const getAllBooks = async () => {
 // ! for getting specific book
 const getSingleBook = async (id: string) => {
   const result = await prisma.book.findUniqueOrThrow({
-    where: { bookId: id },
+    where: { bookId: id, isDeleted: false },
   });
 
   return result;
@@ -29,8 +33,20 @@ const getSingleBook = async (id: string) => {
 // ! for updating book
 const updateBook = async (id: string, payload: Partial<TBook>) => {
   const result = await prisma.book.update({
-    where: { bookId: id },
+    where: { bookId: id, isDeleted: false },
     data: payload,
+  });
+
+  return result;
+};
+
+// ! for deleting book
+const deleteBook = async (id: string) => {
+  const result = await prisma.book.update({
+    where: { bookId: id },
+    data: {
+      isDeleted: true,
+    },
   });
 
   return result;
@@ -42,4 +58,5 @@ export const bookServices = {
   getAllBooks,
   getSingleBook,
   updateBook,
+  deleteBook,
 };

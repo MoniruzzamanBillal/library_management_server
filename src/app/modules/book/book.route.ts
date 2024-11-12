@@ -21,5 +21,8 @@ router.get("/:bookId", bookController.getSingleBook);
 // ! for updaing  book
 router.put("/:bookId", bookController.updateBook);
 
+// ! for deleting  book
+router.delete("/:bookId", bookController.deleteBook);
+
 //
 export const bookRouter = router;
