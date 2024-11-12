@@ -13,7 +13,7 @@ app.use(cors());
 app.use(morgan("dev"));
 
 // ! routes
-app.use("/api/v1", MainRouter);
+app.use("/api", MainRouter);
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {

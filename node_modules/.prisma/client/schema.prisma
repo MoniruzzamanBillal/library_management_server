@@ -20,6 +20,7 @@ model Book {
   publishedYear   Int
   totalCopies     Int
   availableCopies Int
+  isDeleted       Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

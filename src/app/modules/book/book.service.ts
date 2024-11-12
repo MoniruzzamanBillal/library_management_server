@@ -1,7 +1,8 @@
 import prisma from "../../util/PrismaClient";
+import { TBook } from "./book.interface";
 
 // ! for creating a book
-const createBook = async (payload: any) => {
+const addBook = async (payload: TBook) => {
   const result = await prisma.book.create({
     data: payload,
   });
@@ -11,5 +12,5 @@ const createBook = async (payload: any) => {
 
 //
 export const bookServices = {
-  createBook,
+  addBook,
 };
