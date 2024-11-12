@@ -33,6 +33,7 @@ model Member {
   name           String
   email          String         @unique
   phone          String
+  isDeleted      Boolean        @default(false)
   membershipDate DateTime
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
