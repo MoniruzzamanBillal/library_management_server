@@ -43,7 +43,7 @@ A backend API for a Library Management System, enabling CRUD operations for book
 1.  **Clone the Repository**
 
     ```bash
-    git clone https://github.com/MoniruzzamanBillal/library_management_server
+    git clone https://github.com/MoniruzzamanBillal/library_management_server.git
     ```
 
 2.  **Install Dependencies**
