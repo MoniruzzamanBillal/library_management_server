@@ -42,11 +42,24 @@ const updateBook = async (id: string, payload: Partial<TBook>) => {
 
 // ! for deleting book
 const deleteBook = async (id: string) => {
-  const result = await prisma.book.update({
-    where: { bookId: id },
-    data: {
-      isDeleted: true,
-    },
+  const result = await prisma.$transaction(async (trxnClient) => {
+    const result = await trxnClient.book.update({
+      where: { bookId: id },
+      data: {
+        isDeleted: true,
+      },
+    });
+
+    await trxnClient.borrowRecord.updateMany({
+      where: {
+        bookId: id,
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
+
+    return result;
   });
 
   return result;

@@ -19,28 +19,17 @@ const createBorrowBook = async (payload: TBorrow) => {
     },
   });
 
-  const result = await prisma.$transaction(async (trnxClient) => {
-    const result = await trnxClient.borrowRecord.create({
-      data: {
-        bookId,
-        memberId,
-      },
-      select: {
-        borrowId: true,
-        bookId: true,
-        memberId: true,
-        borrowDate: true,
-      },
-    });
-
-    await trnxClient.book.update({
-      where: { bookId },
-      data: {
-        availableCopies: { decrement: 1 },
-      },
-    });
-
-    return result;
+  const result = await prisma.borrowRecord.create({
+    data: {
+      bookId,
+      memberId,
+    },
+    select: {
+      borrowId: true,
+      bookId: true,
+      memberId: true,
+      borrowDate: true,
+    },
   });
 
   return result;
@@ -50,20 +39,11 @@ const createBorrowBook = async (payload: TBorrow) => {
 const returnBook = async (payload: { borrowId: string }) => {
   const { borrowId } = payload;
 
-  await prisma.$transaction(async (trnxClient) => {
-    const borrowdata = await trnxClient.borrowRecord.update({
-      where: { borrowId },
-      data: {
-        returnDate: new Date(),
-      },
-    });
-
-    await trnxClient.book.update({
-      where: { bookId: borrowdata?.bookId },
-      data: {
-        availableCopies: { increment: 1 },
-      },
-    });
+  await prisma.borrowRecord.update({
+    where: { borrowId, isDeleted: false },
+    data: {
+      returnDate: new Date(),
+    },
   });
 };
 
@@ -74,6 +54,7 @@ const getOverdueData = async () => {
   const overdueBookslists = await prisma.borrowRecord.findMany({
     where: {
       returnDate: null,
+      isDeleted: false,
       borrowDate: {
         lt: new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000),
       },
