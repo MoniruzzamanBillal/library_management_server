@@ -48,6 +48,7 @@ model BorrowRecord {
   returnDate DateTime?
   bookId     String
   memberId   String
+  isDeleted  Boolean   @default(false)
 
   book   Book   @relation(fields: [bookId], references: [bookId])
   member Member @relation(fields: [memberId], references: [memberId])
