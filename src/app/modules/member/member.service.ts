@@ -32,6 +32,10 @@ const getSingleMember = async (id: string) => {
 
 // ! for updating member
 const updateMember = async (id: string, payload: Partial<TMember>) => {
+  await prisma.member.findUniqueOrThrow({
+    where: { memberId: id, isDeleted: false },
+  });
+
   const result = await prisma.member.update({
     where: { memberId: id, isDeleted: false },
     data: payload,
@@ -42,6 +46,10 @@ const updateMember = async (id: string, payload: Partial<TMember>) => {
 
 // ! for deleting book
 const deleteMember = async (id: string) => {
+  await prisma.member.findUniqueOrThrow({
+    where: { memberId: id, isDeleted: false },
+  });
+
   const result = await prisma.member.update({
     where: { memberId: id },
     data: {
