@@ -67,8 +67,49 @@ const returnBook = async (payload: { borrowId: string }) => {
   });
 };
 
+// ! for getting overdue data
+const getOverdueData = async () => {
+  const today = new Date();
+
+  const overdueBookslists = await prisma.borrowRecord.findMany({
+    where: {
+      returnDate: null,
+      borrowDate: {
+        lt: new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000),
+      },
+    },
+    include: {
+      book: {
+        select: {
+          title: true,
+        },
+      },
+      member: { select: { name: true } },
+    },
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const overdueList = overdueBookslists?.map((record: any) => {
+    const overdueDays =
+      Math.floor(
+        (today.getTime() - new Date(record.borrowDate).getTime()) /
+          (24 * 60 * 60 * 1000)
+      ) - 14;
+
+    return {
+      borrowId: record.borrowId,
+      bookTitle: record.book.title,
+      borrowerName: record.member.name,
+      overdueDays,
+    };
+  });
+
+  return overdueList;
+};
+
 //
 export const borrowServices = {
   createBorrowBook,
   returnBook,
+  getOverdueData,
 };
