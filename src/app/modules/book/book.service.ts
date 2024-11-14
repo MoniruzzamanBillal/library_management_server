@@ -32,6 +32,10 @@ const getSingleBook = async (id: string) => {
 
 // ! for updating book
 const updateBook = async (id: string, payload: Partial<TBook>) => {
+  await prisma.book.findUniqueOrThrow({
+    where: { bookId: id, isDeleted: false },
+  });
+
   const result = await prisma.book.update({
     where: { bookId: id, isDeleted: false },
     data: payload,
@@ -42,6 +46,10 @@ const updateBook = async (id: string, payload: Partial<TBook>) => {
 
 // ! for deleting book
 const deleteBook = async (id: string) => {
+  await prisma.book.findUniqueOrThrow({
+    where: { bookId: id, isDeleted: false },
+  });
+
   const result = await prisma.$transaction(async (trxnClient) => {
     const result = await trxnClient.book.update({
       where: { bookId: id },
