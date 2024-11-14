@@ -39,6 +39,10 @@ const createBorrowBook = async (payload: TBorrow) => {
 const returnBook = async (payload: { borrowId: string }) => {
   const { borrowId } = payload;
 
+  await prisma.borrowRecord.findUniqueOrThrow({
+    where: { borrowId, isDeleted: false },
+  });
+
   await prisma.borrowRecord.update({
     where: { borrowId, isDeleted: false },
     data: {
