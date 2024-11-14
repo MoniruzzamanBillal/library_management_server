@@ -15,7 +15,20 @@ const createBorrowBook = catchAsync(async (req, res) => {
   });
 });
 
+// ! for returning  borrow book
+const returnBorrowBook = catchAsync(async (req, res) => {
+  const result = await borrowServices.returnBook(req.body);
+
+  sendResponse(res, {
+    success: true,
+    status: httpStatus.OK,
+    message: "Book returned successfully",
+    data: result,
+  });
+});
+
 //
 export const borrowController = {
   createBorrowBook,
+  returnBorrowBook,
 };

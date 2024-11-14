@@ -46,7 +46,29 @@ const createBorrowBook = async (payload: TBorrow) => {
   return result;
 };
 
+// ! return borrow book
+const returnBook = async (payload: { borrowId: string }) => {
+  const { borrowId } = payload;
+
+  await prisma.$transaction(async (trnxClient) => {
+    const borrowdata = await trnxClient.borrowRecord.update({
+      where: { borrowId },
+      data: {
+        returnDate: new Date(),
+      },
+    });
+
+    await trnxClient.book.update({
+      where: { bookId: borrowdata?.bookId },
+      data: {
+        availableCopies: { increment: 1 },
+      },
+    });
+  });
+};
+
 //
 export const borrowServices = {
   createBorrowBook,
+  returnBook,
 };
